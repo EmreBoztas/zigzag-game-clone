@@ -556,6 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 1.5
+  groundSpawner: {fileID: 322421164}
 --- !u!54 &1213861075
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -618,7 +619,7 @@ GameObject:
   - component: {fileID: 1988188059}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
