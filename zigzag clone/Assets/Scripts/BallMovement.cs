@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    Vector3 _direction;
+ 
     [SerializeField] private float _speed;
     [SerializeField] private GroundSpawner groundSpawner;
+    [SerializeField] private Color groundColor;
     InputController _input;    
+
+    private Vector3 _direction;
+
+
     private void Awake()
     {
         _input = new InputController();
@@ -36,12 +41,38 @@ public class BallMovement : MonoBehaviour
         Vector3 move = _direction * _speed * Time.deltaTime;
         transform.position += move;
     }
-    
+
+   
+
+    private void OnCollisionEnter(Collision collider) {
+        if (collider.gameObject.tag == "Ground")
+        {
+            collider.gameObject.GetComponent<Renderer>().material.color = Color.green;
+        }
+        
+    }
+
     private void OnCollisionExit(Collision collider)
     {
         if (collider.gameObject.tag == "Ground")
         {
             groundSpawner.ground_spawner();
+            collider.gameObject.GetComponent<Renderer>().material.color = groundColor;
+            StartCoroutine(DeleteGround(collider.gameObject));
+            StartCoroutine(FallOfTheGround(collider.gameObject));
         }
     }
+    IEnumerator FallOfTheGround(GameObject ground)
+    {
+        yield return new WaitForSeconds(0.7f);
+        ground.AddComponent<Rigidbody>();
+        ground.GetComponent<Renderer>().material.color = Color.black;
+    }
+
+    IEnumerator DeleteGround(GameObject ground)
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(ground);
+    }
+
 }
