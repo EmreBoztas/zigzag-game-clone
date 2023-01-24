@@ -8,8 +8,9 @@ public class BallMovement : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private GroundSpawner groundSpawner;
     [SerializeField] private Color groundColor;
+    [SerializeField] GameObject gameOverPanel;
     InputController _input;    
-
+    private bool _is_It_Falling;
     private Vector3 _direction;
 
 
@@ -24,6 +25,17 @@ public class BallMovement : MonoBehaviour
 
     void Update()
     {
+        if(transform.position.y <= 0.5f)
+            _is_It_Falling = true;
+
+        if(_is_It_Falling == true)
+        {
+            StartCoroutine(GameOver(gameOverPanel));
+            return;
+        }
+            
+
+
         if (_input.SpacePressed)
         {
             if(_direction.x == 0)
@@ -75,4 +87,9 @@ public class BallMovement : MonoBehaviour
         Destroy(ground);
     }
 
+    IEnumerator GameOver(GameObject panel)
+    {
+        yield return new WaitForSeconds(0.4f);
+        panel.SetActive(true);
+    }
 }
