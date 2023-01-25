@@ -6,12 +6,14 @@ public class BallMovement : MonoBehaviour
 {
  
     [SerializeField] private float _speed;
-    [SerializeField] private GroundSpawner groundSpawner;
-    [SerializeField] private Color groundColor;
-    [SerializeField] GameObject gameOverPanel;
-    InputController _input;    
+    [SerializeField] private float _topSpeed;
+    [SerializeField] private GroundSpawner _groundSpawner;
+    [SerializeField] private Color _groundColor;
+    [SerializeField] GameObject _gameOverPanel;
     private bool _is_It_Falling;
     private Vector3 _direction;
+    InputController _input;  
+    [SerializeField] PlayerScore playerScore;
 
 
     private void Awake()
@@ -30,7 +32,7 @@ public class BallMovement : MonoBehaviour
 
         if(_is_It_Falling == true)
         {
-            StartCoroutine(GameOver(gameOverPanel));
+            StartCoroutine(GameOver(_gameOverPanel));
             return;
         }
             
@@ -50,7 +52,9 @@ public class BallMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        Vector3 move = _direction * _speed * Time.deltaTime;
+        float x = playerScore._chracterScore;
+        _topSpeed = _speed + x/250;
+        Vector3 move = _direction * _topSpeed * Time.deltaTime;
         transform.position += move;
     }
 
@@ -59,6 +63,7 @@ public class BallMovement : MonoBehaviour
     private void OnCollisionEnter(Collision collider) {
         if (collider.gameObject.tag == "Ground")
         {
+            playerScore.scoreIncrease();
             collider.gameObject.GetComponent<Renderer>().material.color = Color.green;
         }
         
@@ -68,8 +73,8 @@ public class BallMovement : MonoBehaviour
     {
         if (collider.gameObject.tag == "Ground")
         {
-            groundSpawner.ground_spawner();
-            collider.gameObject.GetComponent<Renderer>().material.color = groundColor;
+            _groundSpawner.ground_spawner();
+            collider.gameObject.GetComponent<Renderer>().material.color = _groundColor;
             StartCoroutine(DeleteGround(collider.gameObject));
             StartCoroutine(FallOfTheGround(collider.gameObject));
         }
