@@ -25,7 +25,7 @@ public class BallMovement : MonoBehaviour
 
     void Update()
     {
-        if(transform.position.y <= 0.5f)
+        if(transform.position.y <= 0.671f)
             _is_It_Falling = true;
 
         if(_is_It_Falling == true)
